@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector, useViewport } from "../../../Redux/hooks";
-import { AddLocationToFirestore, EditLocationToFirestore } from "../../../features/locations";
+import { useAppSelector, useViewport } from "../../../Redux/hooks";
 import { HorizontalWrapper } from "../../wrapper";
 
 interface Props {

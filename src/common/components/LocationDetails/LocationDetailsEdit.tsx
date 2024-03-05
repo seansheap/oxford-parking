@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../Redux/hooks";
 import { AddLocationToFirestore, EditLocationToFirestore } from "../../../features/locations";
-import { HorizontalWrapper } from "../../wrapper";
 import LocationDetailsEditFormItems from "./LocationDetailsEditFormItems";
 
 interface Props {
