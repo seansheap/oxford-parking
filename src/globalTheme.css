@@ -1,0 +1,11 @@
+:root {
+    --foreground: "#ffffff";
+    --background: "#eeeeee";
+    --backgroundGrey: "#cccccc";
+    --backgroundDarkGrey: "#9e9e9e";
+    --primary: "#0092e3";
+    --font: "Nunito";
+    --primaryText: "#002147";
+    --secondaryText: "#002147";
+    --tertiaryText: "#000000";
+}

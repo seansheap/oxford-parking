@@ -1,0 +1,17 @@
+/* src/styles/Header.css */
+
+header {
+  background-color: white;
+  text-align: center;
+
+  .page-title{
+    margin: 0;
+    color: #002147;
+    padding:2rem;
+    user-select: none;
+  }
+
+  
+    /* Add any styling properties for the footer element here */
+}
+

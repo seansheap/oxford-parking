@@ -1,0 +1,14 @@
+/* src/styles/Footer.css */
+
+.link-wrapper {
+  padding: 1rem 0.5rem;
+  margin: 0 1rem ;
+  text-align: center;
+  
+  .link-item{
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #002147;
+    text-decoration: none;
+  }
+}
