@@ -17,7 +17,14 @@ export const ModeWrapper = styled.section`
   flex-direction: column;
 `
 export const RegionWrapper = styled.div`
+  
+  
   display: flex;
+  flex-direction: row;
+
+  @media (max-width: ${theme.breakpoints.md + "px"}) {
+    flex-direction: column;
+  }
   gap: 2rem;
   padding: 1rem;
   background: ${theme.light.background};

@@ -7,9 +7,14 @@ const collectionLocations = collection(db, 'locations');
 export const AddLocationToFirestore = createAsyncThunk(
   'locations/addLocation',
   async (location: LocationItem) => {
-    const addLocationRef = await addDoc(collectionLocations, location)
-    const newLocation = { ...location, id: addLocationRef.id }
-    return newLocation;
+    try {
+      const addLocationRef = await addDoc(collectionLocations, location)
+      const newLocation = { ...location, id: addLocationRef.id }
+      return newLocation;
+    } catch (error) {
+      console.error("writeToDB failed. reason :", error)
+      return null;
+    }
   }
 )
 
@@ -102,7 +107,9 @@ const locationSlice = createSlice({
       state.locations = action.payload;
     })
     builder.addCase(AddLocationToFirestore.fulfilled, (state, action) => {
-      state.locations = [...state.locations, action.payload]
+      if (action.payload) {
+        state.locations = [...state.locations, action.payload]
+      }
     })
     builder.addCase(EditLocationToFirestore.fulfilled, (state, action) => {
       state.locations = state.locations.map(location => location.id === action.payload.id ? action.payload : location)

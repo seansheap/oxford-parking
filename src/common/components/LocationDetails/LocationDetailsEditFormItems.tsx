@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAppSelector, useViewport } from "../../../Redux/hooks";
+import { useAppDispatch, useAppSelector, useViewport } from "../../../Redux/hooks";
 import { HorizontalWrapper } from "../../wrapper";
+import { AddLocationToFirestore, EditLocationToFirestore } from "../../../features/locations";
 
 interface Props {
   mode: boolean;
@@ -22,6 +23,20 @@ const LocationDetailsEditFormItems: React.FC<Props> = ({ mode, selectedLngLat })
   const { minWidth } = useViewport();
   const mobile = minWidth({ size: 'lg' })
 
+  const dispatch = useAppDispatch()
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (mode) {
+      // to update, no id
+      dispatch(AddLocationToFirestore({ id: '0', location, longlat, spaceCount, tempLimit, parkingCode, freeStart, pricePerHour, area, reports }));
+    } else {
+      dispatch(EditLocationToFirestore({ id: selectedLocation.id, location, longlat, spaceCount, tempLimit, parkingCode, freeStart, pricePerHour, area, reports }))
+    }
+  }
+  const HandleFreeStart = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFreeStart(event.target.value)
+  }
+
   useEffect(() => {
     if (mode) {
       setLocation("")
@@ -29,7 +44,7 @@ const LocationDetailsEditFormItems: React.FC<Props> = ({ mode, selectedLngLat })
       setSpaceCount(0)
       setTempLimit(0)
       setParkingCode("")
-      setFreeStart(undefined)
+      setFreeStart("")
       setPricePerHour(0)
       setArea(false)
       setReports(0)
@@ -49,11 +64,7 @@ const LocationDetailsEditFormItems: React.FC<Props> = ({ mode, selectedLngLat })
   }, [mode, selectedLocation, selectedLocation.location])
 
 
-  const HandleFreeStart = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFreeStart(event.target.value)
-  }
   if (!mode && !selectedLocation.id) return <div>Select a paraking region</div>
-
 
   const sectionOne = () => {
     return (
@@ -116,32 +127,41 @@ const LocationDetailsEditFormItems: React.FC<Props> = ({ mode, selectedLngLat })
     }
   }
 
+
+
+  if (!mode && !selectedLocation.id) return <div>Select a parking region</div>
   const desktopActiveSection = () => {
     return (
-      <HorizontalWrapper>
-        {sectionOne()}
-        {sectionTwo()}
-        {sectionThree()}
-      </HorizontalWrapper>
+      <form onSubmit={handleSubmit}>
+        <HorizontalWrapper>
+          {sectionOne()}
+          {sectionTwo()}
+          {sectionThree()}
+        </HorizontalWrapper>
+      </form>
     )
   }
 
   return (
-    <div>
-      <HorizontalWrapper>
-        {mobile ?
-          mobileActiveSection() :
-          desktopActiveSection()
-        }
+    <form onSubmit={handleSubmit}>
 
-      </HorizontalWrapper>
-      {mobile &&
+      <div>
         <HorizontalWrapper>
-          <button disabled={section === 0} type="button" onClick={() => setSection(section - 1)}> <span>&#9668;</span> </button>
-          <button disabled={section === 2} type="button" onClick={() => setSection(section + 1)}><span>&#9658;</span>  </button>
+          {mobile ?
+            mobileActiveSection() :
+            desktopActiveSection()
+          }
+
         </HorizontalWrapper>
-      }
-    </div>
+        {mobile &&
+          <HorizontalWrapper>
+            <button disabled={section === 0} type="button" onClick={() => setSection(section - 1)}> <span>&#9668;</span> </button>
+            <button disabled={section === 2} type="button" onClick={() => setSection(section + 1)}><span>&#9658;</span>  </button>
+          </HorizontalWrapper>
+        }
+      </div>
+    </form>
+
   )
 }
 

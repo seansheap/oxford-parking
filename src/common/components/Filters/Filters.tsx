@@ -13,7 +13,7 @@ const Filters = ({ }: Props) => {
   const { addFilter, clearFilters } = useLocationList()
   const focuslocation = useAppSelector((state) => state.locations.focusedLocation.longlat[0])
   const { minWidth } = useViewport();
-  const mobile = minWidth({ size: 'sm' })
+  const mobile = minWidth({ size: 'md' })
 
   const dispatch = useAppDispatch()
   const reportSelected = () => {
