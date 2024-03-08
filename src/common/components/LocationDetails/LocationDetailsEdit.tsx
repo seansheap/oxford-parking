@@ -32,12 +32,13 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
     } else {
       dispatch(EditLocationToFirestore({ id: selectedLocation.id, location, longlat, spaceCount, tempLimit, parkingCode, freeStart, pricePerHour, area, reports }))
     }
+    editDataSet()
   }
   const HandleFreeStart = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFreeStart(event.target.value)
   }
 
-  useEffect(() => {
+  const editDataSet = () => {
     if (mode) {
       setLocation("")
       setLonglat([])
@@ -60,7 +61,11 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
       setArea(selectedLocation.area)
       setReports(selectedLocation.reports)
     }
+    setSection(0)
+  }
 
+  useEffect(() => {
+    editDataSet()
   }, [mode, selectedLocation, selectedLocation.location])
 
 

@@ -47,7 +47,7 @@ const SimpleMap: FC<LocationProps> = ({ focus, parseCoords, editParking }) => {
     dispatch(setFocusedLocationById(itemId))
   }
   const LocationPin = ({ text }: Marker) => (
-    <div className="pin" style={{ fontSize: '1rem', color: 'red' }}>
+    <div className="pin" style={{ fontSize: '1rem', color: 'red', pointerEvents: 'none' }}>
       *
     </div>
   )
