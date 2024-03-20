@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector, useViewport } from "../../../Redux/hooks";
-import { AddLocationToFirestore, EditLocationToFirestore } from "../../../features/locations";
+import { AddLocationToFirestore, EditLocationToFirestore, PayRestriction, PermitRestriction, VisitRestriction } from "../../../features/locations";
 import { HorizontalWrapper } from "../../wrapper";
+import LocationDetailsRestrictions from "./LocationDetailsRestrictions";
 
 interface Props {
   mode: boolean;
@@ -13,10 +14,9 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
   const [location, setLocation] = useState(selectedLocation.location || "")
   const [longlat, setLonglat] = useState(selectedLocation.longlat || [])
   const [spaceCount, setSpaceCount] = useState(selectedLocation.spaceCount || 0)
-  const [tempLimit, setTempLimit] = useState(selectedLocation.tempLimit || 0)
-  const [parkingCode, setParkingCode] = useState(selectedLocation.parkingCode || "")
-  const [freeStart, setFreeStart] = useState(selectedLocation.freeStart)
-  const [pricePerHour, setPricePerHour] = useState(selectedLocation.pricePerHour || 0)
+  const [visit, setVisit] = useState<VisitRestriction | undefined>(selectedLocation.visit)
+  const [permit, setPermit] = useState<PermitRestriction | undefined>(selectedLocation.permit)
+  const [pay, setPay] = useState<PayRestriction | undefined>(selectedLocation.pay)
   const [area, setArea] = useState(selectedLocation.area || false)
   const [reports, setReports] = useState(selectedLocation.reports || 0)
   const [section, setSection] = useState(0)
@@ -25,28 +25,26 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
 
   const dispatch = useAppDispatch()
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    console.log('submitting', location, longlat, spaceCount, tempLimit, parkingCode, freeStart, pricePerHour, area, reports);
+    console.log('submitting', location, longlat, spaceCount, visit, permit, pay, area, reports);
     event.preventDefault();
+
     if (mode) {
-      dispatch(AddLocationToFirestore({ id: '0', location, longlat, spaceCount, tempLimit, parkingCode, freeStart, pricePerHour, area, reports }));
+      dispatch(AddLocationToFirestore({ id: '0', location, longlat, spaceCount, visit, permit, pay, area, reports }));
     } else {
-      dispatch(EditLocationToFirestore({ id: selectedLocation.id, location, longlat, spaceCount, tempLimit, parkingCode, freeStart, pricePerHour, area, reports }))
+      dispatch(EditLocationToFirestore({ id: selectedLocation.id, location, longlat, spaceCount, visit, permit, pay, area, reports }))
     }
     editDataSet()
   }
-  const HandleFreeStart = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFreeStart(event.target.value)
-  }
+
 
   const editDataSet = () => {
     if (mode) {
       setLocation("")
       setLonglat([])
       setSpaceCount(0)
-      setTempLimit(0)
-      setParkingCode("")
-      setFreeStart("")
-      setPricePerHour(0)
+      setVisit(undefined)
+      setPermit(undefined)
+      setPay(undefined)
       setArea(false)
       setReports(0)
 
@@ -54,10 +52,9 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
       setLocation(selectedLocation.location)
       setLonglat(selectedLocation.longlat)
       setSpaceCount(selectedLocation.spaceCount)
-      setTempLimit(selectedLocation.tempLimit)
-      setParkingCode(selectedLocation.parkingCode || "")
-      setFreeStart(selectedLocation.freeStart)
-      setPricePerHour(selectedLocation.pricePerHour || 0)
+      setVisit(selectedLocation.visit)
+      setPermit(selectedLocation.permit)
+      setPay(selectedLocation.pay)
       setArea(selectedLocation.area)
       setReports(selectedLocation.reports)
     }
@@ -78,21 +75,15 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
         <input type="text" name="location" onChange={(e) => setLocation(e.target.value)} value={location || ""} placeholder="location" />
         <label htmlFor="spaceCount">Space Count</label>
         <input type="number" name="spaceCount" onChange={(e) => setSpaceCount(Number(e.target.value))} value={spaceCount || ""} placeholder="1" />
-        <label htmlFor="tempLimit">Visit Stay Limit</label>
-        <input type="number" name="tempLimit" onChange={(e) => setTempLimit(Number(e.target.value))} value={tempLimit || ""} placeholder="1" />
       </div>)
   }
   const sectionTwo = () => {
     return (
       <div>
-        <label htmlFor="parkingCode">Parking Code</label>
-        <input type="text" name="parkingCode" onChange={(e) => setParkingCode(e.target.value)} value={parkingCode || ""} placeholder="---" />
-        <label htmlFor="freeStart">Free Parking Start Time</label>
-        <input type="time" name="freeStart" onChange={HandleFreeStart} value={freeStart || ""} placeholder="0" />
-        <label htmlFor="pricePerHour">Price Per Hour</label>
-        <input type="number" name="pricePerHour" onChange={(e) => setPricePerHour(Number(e.target.value))} value={pricePerHour || ""} placeholder="0" />
+        <LocationDetailsRestrictions setVisit={setVisit} setPermit={setPermit} setPay={setPay} pay={pay} permit={permit} visit={visit} />
       </div>)
   }
+
 
   const sectionThree = () => {
     return (

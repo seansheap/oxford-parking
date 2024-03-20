@@ -6,6 +6,13 @@ const theme = {
     'md': 570,
     'lg': 916,
   },
+  colourKey: {
+    pay: "#ecad00",
+    permit: "#ff2626",
+    visit: "#00ecc5",
+    free: "#7eec00",
+
+  },
   light: {
     foreground: "#ffffff",
     background: "#eeeeee",

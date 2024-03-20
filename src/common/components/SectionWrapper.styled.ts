@@ -6,6 +6,7 @@ export const MainWrapperH = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1rem;
+
 `
 export const MainWrapperV = styled.div`
   display: flex;
@@ -19,16 +20,24 @@ export const SectionWrapper = styled.section`
   border-radius: 1rem;
   padding: 2rem;
   background: white;
+
+  
 `
 
 export const AsideWrapper = styled.aside`
-  @media (max-width: ${theme.breakpoints.md + "px"}) {
+  width: 30%;
+
+  @media (max-width: ${theme.breakpoints.lg + "px"}) {
     padding-top: 4rem;
+    width: 100%;
+
   }
   display: flex;
   flex-direction: column;
   background: ${theme.light.background};
-  max-height: 50%;
+  max-height: 80vh;
   overflow-y: auto;
+
+  overflow-x: hidden;
   gap: 0.5rem;
 `

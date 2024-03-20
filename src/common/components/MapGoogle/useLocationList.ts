@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAppSelector } from "../../../Redux/hooks";
-import { LocationItem } from "../../../features/locations";
+import { LocationItem, RetrictionTimes } from "../../../features/locations";
+import { startEndtoComparable } from "./MapGoogle.util";
+import { checkFreeUntil } from "./locationList.util";
 
 export const useLocationList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,26 +21,27 @@ export const useLocationList = () => {
     setSearchParams({ q: filter, t: time || "" });
   }
 
-  const checkFreeNow = (item: LocationItem) => {
-    if (!item.freeStart) {
-      return false
-    }
-    const time = searchParams?.get("t")
-    return new Date(new Date().getTime() - item.tempLimit * 1000 * 60 * 60) < (time ? new Date(time) : new Date(item.freeStart))
-  }
-
   useEffect(() => {
     switch (searchParams?.get("q")) {
-      case "free-now":
-        setFilteredlocations(locations.filter((item) => item.freeStart !== undefined && checkFreeNow(item)))
+      case "free-30":
+        setFilteredlocations(locations.filter((item) => checkFreeUntil(item) >= 0.5))
+        break
+      case "free-60":
+        setFilteredlocations(locations.filter((item) => checkFreeUntil(item) >= 1))
+        break
+      case "free-120":
+        setFilteredlocations(locations.filter((item) => checkFreeUntil(item) >= 2))
+        break
+      case "free-180":
+        setFilteredlocations(locations.filter((item) => checkFreeUntil(item) >= 3))
         break
       case "pay-locations":
-        setFilteredlocations(locations.filter((item) => item.freeStart === undefined))
+        setFilteredlocations(locations.filter((item) => item.pay !== undefined))
         break
       case "free-at":
         const time = searchParams?.get("t")
         if (time) {
-          setFilteredlocations(locations.filter((item) => item.freeStart !== undefined && checkFreeNow(item)))
+          setFilteredlocations(locations.filter((item) => item.visit !== undefined && checkFreeUntil(item)))
         }
         break
       default:

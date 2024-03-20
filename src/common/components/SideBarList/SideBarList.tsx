@@ -12,7 +12,7 @@ const SidebarList: React.FC<SidbarProps> = ({ open }) => {
   return (
     <AsideWrapper>
       {locations.map((item) => (
-        <LocationDetails selected={locationId === item.id} key={item.id} {...item} />
+        <LocationDetails selected={locationId === item.id} key={item.id} locationData={item} />
       ))}
     </AsideWrapper>
   )

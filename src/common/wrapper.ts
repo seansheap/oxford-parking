@@ -7,7 +7,6 @@ export const HorizontalWrapper = styled.div`
   flex-direction: row !important;
   justify-content: space-around;
   margin: 0;
-  padding: 0.2rem;
   align-items: center;
   background: ${theme.light.background};
   
@@ -17,4 +16,24 @@ export const HorizontalWrapper = styled.div`
     flex-direction: column;
     gap: 0.1rem;
   }
+`
+
+export const HorizontalWrapperMin = styled.div`
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-around;
+  align-items: center;
+  background: ${theme.light.background};
+  gap: 0.1rem;
+`
+
+
+export const HorizontalWrapperBasic = styled.div`
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0.2rem;
+  align-items: center;
+  background: ${theme.light.background};
 `

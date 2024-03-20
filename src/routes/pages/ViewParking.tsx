@@ -5,7 +5,7 @@ import SidebarList from "../../common/components/SideBarList/SideBarList";
 
 const ViewParking = () => {
   const { minWidth } = useViewport();
-  const mobile = minWidth({ size: 'md' })
+  const mobile = minWidth({ size: 'lg' })
   return (
     <>
       <SectionWrapper>

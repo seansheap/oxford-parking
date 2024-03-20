@@ -6,12 +6,16 @@ export const FitterWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
+  width: 100%;
   position: relative;
   h1{
     margin: 0.5rem;
   }
   .filter--button-wrapper{
     display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 10rem;
     gap:1rem;
     position: absolute;
     top:4rem;
@@ -24,7 +28,7 @@ export const FitterWrapper = styled.div`
     display: flex;
     flex-direction: column;
     position: absolute;
-    top:4rem;
+    top:6rem;
     left: 0;
     width: 100%;
     gap: 1rem;
@@ -39,8 +43,12 @@ export const FitterWrapper = styled.div`
   }
 .filter--title-wrapper{
   display: flex;
+  flex-direction: row;
 
-
+  @media (max-width: ${theme.breakpoints.md + "px"}) {
+    flex-direction: column;
+    align-self: start;
+  }
   align-items: center;
   button{
     min-width: unset;
@@ -50,6 +58,10 @@ export const FitterWrapper = styled.div`
     user-select: none;
     padding: 0;
     border: none;
+    @media (max-width: ${theme.breakpoints.md + "px"}) {
+    width: 5rem;
+
+  }
   }
 
 }
