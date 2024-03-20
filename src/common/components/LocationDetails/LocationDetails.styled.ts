@@ -14,10 +14,13 @@ export const ItemWrapper = styled.div<Props>`
   display: flex;
   flex-direction: column;
   margin: 0.4rem;
-  padding: 1rem;
+  padding: 0.5rem;
   background: ${theme.light.foreground};
-  border: 1px solid ${props => props.$selected ? theme.light.primary : "transparent"};
-
+  border: 5px solid ${props => props.$selected ? theme.light.primary : "transparent"};
+  h4 {
+    text-transform: uppercase;
+    margin: 0.5rem 0;
+  }
   p{
     padding: 0;
     margin: 0;

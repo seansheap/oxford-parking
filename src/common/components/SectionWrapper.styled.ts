@@ -13,15 +13,18 @@ export const MainWrapperV = styled.div`
   flex-direction: column;
   gap: 1rem;
 `
-
+export const HomeWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  background: white;
+`
 export const SectionWrapper = styled.section`
   display: flex;
   flex-direction: column;
   border-radius: 1rem;
   padding: 2rem;
   background: white;
-
-  
 `
 
 export const AsideWrapper = styled.aside`

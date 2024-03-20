@@ -3,6 +3,7 @@ import { HorizontalWrapper, HorizontalWrapperBasic, HorizontalWrapperMin } from 
 import { PayRestriction, PermitRestriction, VisitRestriction } from "../../../features/locations";
 import { activeTimesToDays } from "./Restriction.util";
 import { RestrictionWrapper } from "./LocationDetails.styled";
+import { subscribe } from "diagnostics_channel";
 
 interface LocationDetailsRestrictionsProps {
     setVisit: Function;
@@ -40,7 +41,9 @@ const LocationDetailsRestrictions = ({ setPay, setPermit, setVisit, visit, permi
         setCurrentEndTime(end)
     }, [restrictionSection, pay, permit, visit]);
 
+
     const handleSubmit = () => {
+        console.log('handling submit')
         const activeTimes = []
         for (let index = 0; index < currentStartTime.length; index++) {
             if (currentStartTime[index] === '00:00' && currentEndTime[index] === '00:00') continue
@@ -67,6 +70,7 @@ const LocationDetailsRestrictions = ({ setPay, setPermit, setVisit, visit, permi
         const temp = [...currentStartTime]
         temp[daySection] = time
         setCurrentStartTime(temp)
+
     }
     const handleSetEndTime = (time: string) => {
         const temp = [...currentEndTime]
@@ -119,18 +123,18 @@ const LocationDetailsRestrictions = ({ setPay, setPermit, setVisit, visit, permi
     const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
     return (
-        <RestrictionWrapper>
+        <RestrictionWrapper onBlur={handleSubmit}>
             <HorizontalWrapper>
-                <button disabled={restrictionSection === 0} type="button" onClick={() => setRestrictionSection(restrictionSection - 1)}> <span>&#9668;</span> </button>
+                <button disabled={restrictionSection === 0} type="button" onClick={() => { handleSubmit(); setRestrictionSection(restrictionSection - 1) }}> <span>&#9668;</span> </button>
                 <h4>{titles[restrictionSection]}</h4>
-                <button disabled={restrictionSection === 2} type="button" onClick={() => setRestrictionSection(restrictionSection + 1)}><span>&#9658;</span>  </button>
+                <button disabled={restrictionSection === 2} type="button" onClick={() => { handleSubmit(); setRestrictionSection(restrictionSection + 1) }}><span>&#9658;</span>  </button>
                 <button type="button" onClick={handleSubmit}> Save </button>
             </HorizontalWrapper>
 
             {restictionSectionData()}
             <HorizontalWrapperMin>
                 {days.map((day, idx) => (
-                    <button className={`day-button ${currentStartTime[idx] != '' && currentEndTime[idx] != '' && "day-button-active"} `} disabled={daySection === idx} type="button" onClick={() => setDaySection(idx)}> {day} </button>
+                    <button key={idx} className={`day-button ${currentStartTime[idx] != '' && currentEndTime[idx] != '' && "day-button-active"} `} disabled={daySection === idx} type="button" onClick={() => setDaySection(idx)}> {day} </button>
                 ))}
 
             </HorizontalWrapperMin>

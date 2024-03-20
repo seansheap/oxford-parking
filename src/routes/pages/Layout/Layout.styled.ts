@@ -5,9 +5,8 @@ export const MainBody = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  min-height: 0;
+  min-height: 60vh;
   padding: 0 3rem;
-
   @media (max-width: ${theme.breakpoints.md + "px"}) {
     padding: 0rem;
   }

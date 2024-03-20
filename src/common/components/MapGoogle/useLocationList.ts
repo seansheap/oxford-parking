@@ -36,12 +36,12 @@ export const useLocationList = () => {
         setFilteredlocations(locations.filter((item) => checkFreeUntil(item) >= 3))
         break
       case "pay-locations":
-        setFilteredlocations(locations.filter((item) => item.pay !== undefined))
+        setFilteredlocations(locations.filter((item) => item.pay?.pricePerHour))
         break
       case "free-at":
         const time = searchParams?.get("t")
         if (time) {
-          setFilteredlocations(locations.filter((item) => item.visit !== undefined && checkFreeUntil(item)))
+          setFilteredlocations(locations.filter((item) => checkFreeUntil(item)))
         }
         break
       default:

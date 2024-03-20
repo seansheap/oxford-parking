@@ -50,18 +50,17 @@ export const FitterWrapper = styled.div`
     align-self: start;
   }
   align-items: center;
-  button{
-    min-width: unset;
-    width: 2.2rem;
-    font-size: 2rem;
-    cursor: pointer;
-    user-select: none;
-    padding: 0;
-    border: none;
-    @media (max-width: ${theme.breakpoints.md + "px"}) {
-    width: 5rem;
-
-  }
+    button{
+      min-width: unset;
+      width: 2.2rem;
+      font-size: 2rem;
+      cursor: pointer;
+      user-select: none;
+      padding: 0;
+      border: none;
+      @media (max-width: ${theme.breakpoints.md + "px"}) {
+      width: 5rem;
+      }
   }
 
 }

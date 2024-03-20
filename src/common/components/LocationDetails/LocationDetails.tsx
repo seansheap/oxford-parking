@@ -1,6 +1,7 @@
 import { useAppDispatch } from "../../../Redux/hooks";
 import { LocationItem, setFocusedLocationById } from "../../../features/locations";
 import { ItemWrapper } from "./LocationDetails.styled";
+import { activeTimesToDays } from "./Restriction.util";
 
 interface Props {
   selected: boolean;
@@ -8,31 +9,23 @@ interface Props {
 }
 
 const LocationDetails = ({ selected, locationData }: Props) => {
+
   const { location, id, longlat, spaceCount, pay, permit, visit } = locationData
-  let timeAsString24 = null;
-  // if (freeStart) {
-  //   const time = new Date(`01 Jan 1970 ${freeStart}`);
-  //   let hours = time.getHours().toString().padStart(2, '0');
-  //   const minutes = time.getMinutes().toString().padStart(2, '0');
-  //   if (tempLimit) {
-  //     hours = (time.getHours() - tempLimit).toString().padStart(2, '0');
-  //   }
-  //   timeAsString24 = `${hours}:${minutes}`;
-  // }
-
-
   const dispatch = useAppDispatch()
   const onClick = () => { dispatch(setFocusedLocationById(id)) };
+  const day = new Date().getDay();
+  const visitDays = activeTimesToDays(visit?.activeTimes || []);
+  const permitDays = activeTimesToDays(permit?.activeTimes || []);
+  const payDays = activeTimesToDays(pay?.activeTimes || []);
 
   return (
     <ItemWrapper $selected={selected} onClick={onClick}>
       <h4>{location || "Location"}</h4>
       <p>Parking Count:{spaceCount || "1"}</p>
-      {/* {tempLimit ? <p>Visiting Time Limit:{tempLimit || "NA"}</p> : null}
-      {parkingCode ? <p>Permit Code:{parkingCode || "NA"}</p> : null}
-      {timeAsString24 ? <p>Free Parking:{timeAsString24 || "NA"}</p> : null}
-      {pricePerHour ? <p>Price Per Hour:{pricePerHour || "NA"}</p> : null} */}
-      <a target="_blank" rel="noreferrer" href={`https://www.google.com/maps/@${longlat[0].lat},${longlat[0].lng}z`}>Google Maps</a>
+      {locationData.visit?.limit ? <div> <p>Visiting Limit:{locationData.visit.limit || "NA"} </p><p> {visitDays.start[day]} - {visitDays.end[day]}</p></div> : null}
+      {locationData.permit?.permitCode ? <div> <p>Permit Code:{locationData.permit.permitCode || "NA"}  </p><p>{permitDays.start[day]} - {permitDays.end[day]}</p></div> : null}
+      {locationData.pay?.pricePerHour ? <div><p>Price Per Hour:{locationData.pay.pricePerHour || "NA"} </p><p> {payDays.start[day]} - {payDays.end[day]}</p></div> : null}
+      {longlat[0]?.lat && longlat[0]?.lng && <a target="_blank" rel="noreferrer" href={`https://www.google.com/maps/@${longlat[0].lat.toFixed(7)},${longlat[0].lng.toFixed(7)},20z`}>Google Maps</a>}
     </ItemWrapper>
   )
 }
