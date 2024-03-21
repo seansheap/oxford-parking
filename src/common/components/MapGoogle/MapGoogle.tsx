@@ -29,14 +29,18 @@ const SimpleMap: FC<LocationProps> = ({ focus, parseCoords, editParking }) => {
     zoom: 15
   };
   const focusLocation = useAppSelector((state) => state.locations.focusedLocation)
-  const focuslocationLngLat = focusLocation.longlat[0]
+  const focuslocationLngLat = focusLocation.longlat[Math.floor(focusLocation.longlat.length / 2)]
 
 
   const [cordinates, setCordinates] = useState(defaultProps.center);
+  const [zoom, setZoom] = useState(defaultProps.zoom);
 
   useEffect(() => {
+    setZoom(17)
+
     if (focuslocationLngLat?.lat) {
       setCordinates(focuslocationLngLat);
+      setTimeout(() => setZoom(18), 300)
     } else {
       setCordinates(defaultProps.center);
     }
@@ -71,6 +75,7 @@ const SimpleMap: FC<LocationProps> = ({ focus, parseCoords, editParking }) => {
       <GoogleMapReact
         bootstrapURLKeys={{ key: "AIzaSyDHDVhLcShVWKXra5JfEJqkl5YNDR1DeU4" }}
         defaultZoom={defaultProps.zoom}
+        zoom={zoom}
         center={cordinates}
         onClick={mapClick}
         yesIWantToUseGoogleMapApiInternals //this is important!
