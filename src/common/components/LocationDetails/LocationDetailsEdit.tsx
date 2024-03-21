@@ -88,18 +88,19 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
   const sectionThree = () => {
     return (
       <HorizontalWrapper>
-        <div>
-          <HorizontalWrapper>
+        <div className="location-details--section-three">
+          <h4>Location Points</h4>
+          <div className="location-details--checkbox">
             <label htmlFor="area">Area</label>
             <input type="checkbox" name="area" onChange={(e) => setArea(e.target.checked)} checked={area} placeholder="---" />
-          </HorizontalWrapper>
+          </div>
           <div className="location-details--button-stack">
             {longlat.map((item, idx) => (
               <div key={idx}>
-                <button type="button" onClick={() => setLonglat([...longlat.slice(0, idx), ...longlat.slice(idx + 1)])}>Delete {idx}</button>
+                <button type="button" onClick={() => setLonglat([...longlat.slice(0, idx), ...longlat.slice(idx + 1)])}>Del {idx}</button>
               </div>
             ))}
-            <button type="button" onClick={() => setLonglat([...longlat, { ...selectedLngLat }])}>Add Marker</button>
+            <button type="button" onClick={() => setLonglat([...longlat, { ...selectedLngLat }])}> Add </button>
           </div>
 
         </div>

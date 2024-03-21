@@ -11,10 +11,22 @@ export const HorizontalWrapper = styled.div`
   background: ${theme.light.background};
   
   gap: 1rem;
+  .location-details--section-three{
+    min-width: 8rem;
+  }
+  .location-details--checkbox{
+    display: flex !important;
+    flex-direction: row !important;
+    margin:  0.5rem 0;
+    width: fit-content;
+
+  }
   .location-details--button-stack{
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: repeat(5, minmax(1rem, 1fr)); /* This line limits to 5 per row */
+    grid-auto-flow: column;
     gap: 0.1rem;
+    width: max-content;
   }
 `
 

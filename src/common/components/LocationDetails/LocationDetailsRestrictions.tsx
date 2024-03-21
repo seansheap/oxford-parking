@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { HorizontalWrapper, HorizontalWrapperBasic, HorizontalWrapperMin } from "../../wrapper";
 import { PayRestriction, PermitRestriction, VisitRestriction } from "../../../features/locations";
 import { activeTimesToDays } from "./Restriction.util";
-import { RestrictionWrapper } from "./LocationDetails.styled";
+import { RestrictionWrapper, TimeSelectWrapper } from "./LocationDetails.styled";
 import { subscribe } from "diagnostics_channel";
 
 interface LocationDetailsRestrictionsProps {
@@ -53,13 +53,13 @@ const LocationDetailsRestrictions = ({ setPay, setPermit, setVisit, visit, permi
         }
         switch (restrictionSection) {
             case 0:
-                setVisit({ activeTimes: activeTimes, limit: parseInt(restrictionParam) });
+                setVisit({ activeTimes: activeTimes, limit: parseFloat(restrictionParam) });
                 break;
             case 1:
                 setPermit({ activeTimes: activeTimes, permitCode: restrictionParam });
                 break;
             case 2:
-                setPay({ activeTimes: activeTimes, pricePerHour: parseInt(restrictionParam) });
+                setPay({ activeTimes: activeTimes, pricePerHour: parseFloat(restrictionParam) });
                 break;
             default:
                 console.log('error')
@@ -89,36 +89,54 @@ const LocationDetailsRestrictions = ({ setPay, setPermit, setVisit, visit, permi
             case 0: return (
                 <div>
                     <label htmlFor="limit" >Length of time</label>
-                    <input type="text" name="limit" value={restrictionParam} onChange={(e) => setRestrictionParam(e.target.value)} />
-                    <label htmlFor="start-time" >start time</label>
-                    <input type="time" name="start-time" value={currentStartTime[daySection]} onChange={(e) => handleSetStartTime(e.target.value)} />
-                    <label htmlFor="end-time" >end time</label>
-                    <input type="time" name="end-time" value={currentEndTime[daySection]} onChange={(e) => handleSetEndTime(e.target.value)} />
+                    <input type="text" name="limit" value={restrictionParam} onChange={(e) => { console.log(e.target.value); setRestrictionParam(e.target.value) }} />
+                    {timeSelect()}
                 </div>)
 
             case 1: return (
                 <div>
                     <label htmlFor="permit-code" >Permit Code</label>
                     <input type="text" name="permit-code" value={restrictionParam} onChange={(e) => setRestrictionParam(e.target.value)} />
-                    <label htmlFor="start-time" >start time</label>
-                    <input type="time" name="start-time" value={currentStartTime[daySection]} onChange={(e) => handleSetStartTime(e.target.value)} />
-                    <label htmlFor="end-time" >end time</label>
-                    <input type="time" name="end-time" value={currentEndTime[daySection]} onChange={(e) => handleSetEndTime(e.target.value)} />
+                    {timeSelect()}
                 </div>)
             case 2: return (
                 <div>
                     <label htmlFor="price-per-hour" >Price per Hour</label>
                     <input type="text" name="price-per-hour" value={restrictionParam} onChange={(e) => setRestrictionParam(e.target.value)} />
-                    <label htmlFor="start-time" >start time</label>
-                    <input type="time" name="start-time" value={currentStartTime[daySection]} onChange={(e) => handleSetStartTime(e.target.value)} />
-                    <label htmlFor="end-time" >end time</label>
-                    <input type="time" name="end-time" value={currentEndTime[daySection]} onChange={(e) => handleSetEndTime(e.target.value)} />
-
-
+                    {timeSelect()}
                 </div>)
             default: return <></>
 
         }
+    }
+    const defualtTimeRange = () => {
+        handleSetStartTime('08:00')
+        handleSetEndTime('18:30')
+    }
+    const allDayRange = () => {
+        handleSetStartTime('00:00')
+        handleSetEndTime('23:59')
+    }
+    const clearDayRange = () => {
+        handleSetStartTime('')
+        handleSetEndTime('')
+    }
+    const timeSelect = () => {
+        return (
+            <TimeSelectWrapper>
+                <div className="time-select-wrapper">
+                    <label htmlFor="start-time" >start time</label>
+                    <input type="time" name="start-time" value={currentStartTime[daySection] || ''} onChange={(e) => handleSetStartTime(e.target.value)} />
+                    <label htmlFor="end-time" >end time</label>
+                    <input type="time" name="end-time" value={currentEndTime[daySection]} onChange={(e) => handleSetEndTime(e.target.value)} />
+                </div>
+                <div className="time-button-wrapper">
+                    <button type="button" onClick={defualtTimeRange}>Defualt </button>
+                    <button type="button" onClick={allDayRange}>All Day</button>
+                    <button type="button" onClick={clearDayRange}>Clear Day</button>
+                </div>
+            </TimeSelectWrapper>
+        )
     }
     const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 

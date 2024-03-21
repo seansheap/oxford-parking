@@ -38,3 +38,23 @@ export const RestrictionWrapper = styled.div`
     background:greenyellow;
   }
 `
+export const TimeSelectWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row !important;
+  button{
+    height: 100%;
+    width: 100%;
+  }
+  .time-select-wrapper{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+  }
+  .time-button-wrapper{
+    max-width: 5rem;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+  }
+`

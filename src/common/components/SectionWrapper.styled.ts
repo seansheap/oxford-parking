@@ -28,7 +28,9 @@ export const SectionWrapper = styled.section`
 `
 
 export const AsideWrapper = styled.aside`
-  width: 30%;
+  width: 18%;
+  min-width: 12rem;
+
 
   @media (max-width: ${theme.breakpoints.lg + "px"}) {
     padding-top: 4rem;
