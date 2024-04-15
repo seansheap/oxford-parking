@@ -24,13 +24,25 @@ export const MarkerCorner = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  width: 4px;
+  width:4px;
   height: 4px;
+  
   border-radius: 2px;
   background-color: salmon;
 `
+export const MarkerRadius = styled.div`
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  width:40px;
+  height: 40px;
+  
+  border-radius: 20px;
+  background-color: salmon;
+`
+
 export const MarkerWrapper = styled.div`
-  font-size: 1rem;
+  font-size:  1rem;
   color: red;
   pointer-events: none;
   position: relative;

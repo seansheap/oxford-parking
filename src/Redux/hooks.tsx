@@ -1,7 +1,7 @@
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import type { RootState, AppDispatch } from './store'
-import { FC, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import theme from '../styles/theme';
+import type { AppDispatch, RootState } from './store';
 
 export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
@@ -35,3 +35,21 @@ export const useViewport = () => {
     minWidth: minSize
   }
 }
+
+
+export const useDebounce = (value: string, delay = 500) => {
+  const [debouncedValue, setDebouncedValue] = useState("");
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    timerRef.current = setTimeout(() => setDebouncedValue(value), delay);
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};

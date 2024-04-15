@@ -16,7 +16,7 @@ const RegionDefiner = ({ selectedLngLat }: Props) => {
         <ModeSelect AddMode={AddMode} setAddMode={setAddMode} />
       </ModeWrapper>
       <EditParamsWrapper>
-        <LocationDetailsEdit selectedLngLat={selectedLngLat} mode={AddMode} />
+        <LocationDetailsEdit selectedLngLat={selectedLngLat} addMode={AddMode} />
       </EditParamsWrapper>
     </RegionWrapper>
   )

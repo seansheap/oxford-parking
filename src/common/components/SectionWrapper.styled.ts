@@ -25,6 +25,8 @@ export const SectionWrapper = styled.section`
   border-radius: 1rem;
   padding: 2rem;
   background: white;
+  margin-top: 1rem;
+
 `
 
 export const AsideWrapper = styled.aside`

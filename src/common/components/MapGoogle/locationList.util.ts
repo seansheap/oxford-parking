@@ -61,7 +61,17 @@ export const checkFreeUntil = (item: LocationItem) => {
   let untilPay = 12
   let untilPermit = 12
   let untilVisit = 12
+  let untilFree = 0
+  // if free now, use that or permit
+  //if visit, find use the limit time
+  //if visit time cant be completely used, check to see if there is any other restriction started after limit
+  if (item.free) {
+    const { freeLength, endTimeOfRestriction } = visitRestrictionCalculation(item.free.activeTimes)
+    untilFree = nextRestrictionCalculation(item.free.activeTimes, 0, endTimeOfRestriction)
+  }
+
   if (item.visit && item.visit.limit) {
+
     const { freeLength, endTimeOfRestriction } = visitRestrictionCalculation(item.visit.activeTimes, item.visit.limit)
     if (freeLength < item.visit.limit) {
 
@@ -73,7 +83,7 @@ export const checkFreeUntil = (item: LocationItem) => {
       if (item.permit) {
         untilPermit = nextRestrictionCalculation(item.permit.activeTimes, 0, endTimeOfRestriction)
       }
-      return freeLength + Math.min(untilPay, untilPermit, untilVisit)
+      return freeLength + Math.min(untilPay, untilPermit || untilFree, untilVisit)
     } else {
       return (freeLength)
     }
@@ -86,7 +96,7 @@ export const checkFreeUntil = (item: LocationItem) => {
       untilPermit = nextRestrictionCalculation(item.permit.activeTimes, 0)
     }
 
-    return Math.min(untilPay, untilPermit)
+    return Math.min(untilPay, untilPermit || untilFree, untilVisit)
   }
 
 

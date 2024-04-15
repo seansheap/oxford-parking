@@ -1,5 +1,5 @@
 import { useViewport } from "../../Redux/hooks";
-import SimpleMap from "../../common/components/MapGoogle/MapGoogle";
+import GoogleMap from "../../common/components/MapGoogle/MapGoogle";
 import { MainWrapperH, MainWrapperV, SectionWrapper } from "../../common/components/SectionWrapper.styled";
 import SidebarList from "../../common/components/SideBarList/SideBarList";
 
@@ -13,11 +13,12 @@ const ViewParking = () => {
         {!mobile ? (
           <MainWrapperH>
             <SidebarList />
-            <SimpleMap />
+            <GoogleMap />
           </MainWrapperH>
+
         ) : (
           <MainWrapperV>
-            <SimpleMap />
+            <GoogleMap />
             <SidebarList />
           </MainWrapperV>
         )}

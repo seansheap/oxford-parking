@@ -1,79 +1,40 @@
 import GoogleMapReact from 'google-map-react';
-import { FC, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../Redux/hooks";
-import { LocationItem, setFocusedLocationById } from '../../../features/locations';
-import { useLocationList } from "./useLocationList";
+import { FC } from "react";
 import Filters from '../Filters/Filters';
-import { MainWrapper, MapWrapper } from './MapGoogle.styled';
-import LocationPin from './LocationMarker';
-import { handleApiLoaded } from './MapGoogle.util';
 import KeyExplain from '../KeyExplain/KeyExplain';
+import SearchBar from '../SearchBar/SearchBar';
+import LocationPin from './LocationMarker';
+import { MapWrapper } from './MapGoogle.styled';
+import { handleApiLoaded } from './MapGoogle.util';
+import { useGoogleMap } from './useMapGoogle';
 
 
 interface LocationProps {
-  focus?: {
-    lng: number;
-    lat: number;
-  }
   parseCoords?: Function;
   editParking?: Function;
 }
-// const MarkerRegion = ({ text, onClick }: Marker) => <div onClick={() => onClick()} style={{ width: '100%', height: '100%' }}>{text}</div>;
 
-const SimpleMap: FC<LocationProps> = ({ focus, parseCoords, editParking }) => {
-  const defaultProps = {
-    center: {
-      lat: 51.7520,
-      lng: -1.2577
-    },
-    zoom: 15
-  };
-  const focusLocation = useAppSelector((state) => state.locations.focusedLocation)
-  const focuslocationLngLat = focusLocation.longlat[Math.floor(focusLocation.longlat.length / 2)]
+export const GoogleMap: FC<LocationProps> = ({ parseCoords, editParking }) => {
 
-
-  const [cordinates, setCordinates] = useState(defaultProps.center);
-  const [zoom, setZoom] = useState(defaultProps.zoom);
-
-  useEffect(() => {
-    setZoom(17)
-
-    if (focuslocationLngLat?.lat) {
-      setCordinates(focuslocationLngLat);
-      setTimeout(() => setZoom(18), 300)
-    } else {
-      setCordinates(defaultProps.center);
-    }
-  }, [focuslocationLngLat?.lat])
-
-
-  const dispatch = useAppDispatch()
-  const regionSelected = (itemId: string) => {
-    dispatch(setFocusedLocationById(itemId))
-  }
-
-
-  const [selectedPoint, setSelectedPoint] = useState({ lat: 0, lng: 0 })
-
-  const mapClick = (e: GoogleMapReact.ClickEventValue) => {
-    setSelectedPoint({ lat: e.lat, lng: e.lng })
-    parseCoords && parseCoords(e)
-  }
-
-  const { isLoading, locations } = useLocationList()
+  const { defaultProps, isLoading, locations, regionSelected, focusLocation, mapClick, cordinates, zoom, selectedPoint } = useGoogleMap({ parseCoords })
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div data-testid="map-loading">Loading...</div>
   }
 
   return (
     <MapWrapper >
-      <div className='map--top-bar'>
-        <Filters />
-        <KeyExplain />
-      </div>
+      <SearchBar data-testid="search-bar" />
+
+      {!parseCoords &&
+        <div className='map--top-bar'>
+          <Filters />
+          <KeyExplain />
+        </div>
+      }
       <GoogleMapReact
-        bootstrapURLKeys={{ key: "AIzaSyDHDVhLcShVWKXra5JfEJqkl5YNDR1DeU4" }}
+        data-testid="map"
+        bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY || '' }}
         defaultZoom={defaultProps.zoom}
         zoom={zoom}
         center={cordinates}
@@ -81,7 +42,14 @@ const SimpleMap: FC<LocationProps> = ({ focus, parseCoords, editParking }) => {
         yesIWantToUseGoogleMapApiInternals //this is important!
         onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(locations, regionSelected, map, maps)}
       >
-
+        {focusLocation?.longlat.length === 1 &&
+          <LocationPin
+            lat={focusLocation.longlat[0].lat}
+            lng={focusLocation.longlat[0].lng}
+            text=""
+            onClick={() => { }}
+          />
+        }
         {focusLocation && parseCoords &&
           focusLocation.longlat.map((item, idx) => (
             <LocationPin
@@ -93,6 +61,7 @@ const SimpleMap: FC<LocationProps> = ({ focus, parseCoords, editParking }) => {
           ))}
         {parseCoords &&
           <LocationPin
+            data-testid="selected-point"
             lat={selectedPoint.lat}
             lng={selectedPoint.lng}
             text="*"
@@ -103,4 +72,4 @@ const SimpleMap: FC<LocationProps> = ({ focus, parseCoords, editParking }) => {
     </MapWrapper>
   );
 }
-export default SimpleMap;
+export default GoogleMap;

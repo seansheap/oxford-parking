@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector, useViewport } from "../../../Redux/hooks";
-import { AddLocationToFirestore, EditLocationToFirestore, PayRestriction, PermitRestriction, VisitRestriction } from "../../../features/locations";
+import { AddLocationToFirestore, EditLocationToFirestore, FreeRestriction, PayRestriction, PermitRestriction, VisitRestriction } from "../../../features/locations";
 import { HorizontalWrapper } from "../../wrapper";
 import LocationDetailsRestrictions from "./LocationDetailsRestrictions";
 
 interface Props {
-  mode: boolean;
+  addMode: boolean;
   selectedLngLat: { lng: number; lat: number };
 }
 
-const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
+const LocationDetailsEdit: React.FC<Props> = ({ addMode, selectedLngLat }) => {
   const selectedLocation = useAppSelector((state) => state.locations.focusedLocation)
   const [location, setLocation] = useState(selectedLocation.location || "")
   const [longlat, setLonglat] = useState(selectedLocation.longlat || [])
@@ -17,6 +17,7 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
   const [visit, setVisit] = useState<VisitRestriction | undefined>(selectedLocation.visit)
   const [permit, setPermit] = useState<PermitRestriction | undefined>(selectedLocation.permit)
   const [pay, setPay] = useState<PayRestriction | undefined>(selectedLocation.pay)
+  const [free, setFree] = useState<FreeRestriction | undefined>(selectedLocation.free)
   const [area, setArea] = useState(selectedLocation.area || false)
   const [reports, setReports] = useState(selectedLocation.reports || 0)
   const [section, setSection] = useState(0)
@@ -25,26 +26,27 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
 
   const dispatch = useAppDispatch()
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    console.log('submitting', location, longlat, spaceCount, visit, permit, pay, area, reports);
+    console.log('submitting', location, longlat, spaceCount, visit, permit, pay, free, area, reports);
     event.preventDefault();
 
-    if (mode) {
-      dispatch(AddLocationToFirestore({ id: '0', location, longlat, spaceCount, visit, permit, pay, area, reports }));
+    if (addMode) {
+      dispatch(AddLocationToFirestore({ id: '0', location, longlat, spaceCount, visit, permit, pay, free, area, reports }));
     } else {
-      dispatch(EditLocationToFirestore({ id: selectedLocation.id, location, longlat, spaceCount, visit, permit, pay, area, reports }))
+      dispatch(EditLocationToFirestore({ id: selectedLocation.id, location, longlat, spaceCount, visit, permit, pay, free, area, reports }));
     }
     editDataSet()
   }
 
 
   const editDataSet = () => {
-    if (mode) {
+    if (addMode) {
       setLocation("")
       setLonglat([])
       setSpaceCount(0)
       setVisit(undefined)
       setPermit(undefined)
       setPay(undefined)
+      setFree(undefined)
       setArea(false)
       setReports(0)
 
@@ -55,6 +57,7 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
       setVisit(selectedLocation.visit)
       setPermit(selectedLocation.permit)
       setPay(selectedLocation.pay)
+      setFree(selectedLocation.free)
       setArea(selectedLocation.area)
       setReports(selectedLocation.reports)
     }
@@ -63,10 +66,10 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
 
   useEffect(() => {
     editDataSet()
-  }, [mode, selectedLocation, selectedLocation.location])
+  }, [addMode, selectedLocation, selectedLocation.location])
 
 
-  if (!mode && !selectedLocation.id) return <div>Select a paraking region</div>
+  if (!addMode && !selectedLocation.id) return <div>Select a paraking region</div>
 
   const sectionOne = () => {
     return (
@@ -80,7 +83,7 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
   const sectionTwo = () => {
     return (
       <div>
-        <LocationDetailsRestrictions setVisit={setVisit} setPermit={setPermit} setPay={setPay} pay={pay} permit={permit} visit={visit} />
+        <LocationDetailsRestrictions setVisit={setVisit} setPermit={setPermit} setPay={setPay} setFree={setFree} pay={pay} permit={permit} visit={visit} free={free} />
       </div>)
   }
 
@@ -125,7 +128,7 @@ const LocationDetailsEdit: React.FC<Props> = ({ mode, selectedLngLat }) => {
 
 
 
-  if (!mode && !selectedLocation.id) return <div>Select a parking region</div>
+  if (!addMode && !selectedLocation.id) return <div>Select a parking region</div>
   const desktopActiveSection = () => {
     return (
       <HorizontalWrapper>

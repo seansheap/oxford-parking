@@ -1,6 +1,6 @@
 import { ClickEventValue } from "google-map-react";
 import { useState } from "react";
-import SimpleMap from "../../common/components/MapGoogle/MapGoogle";
+import GoogleMap from "../../common/components/MapGoogle/MapGoogle";
 import RegionDefiner from "../../common/components/RegionDefiner/RegionDefiner";
 import { MainWrapperH, SectionWrapper } from "../../common/components/SectionWrapper.styled";
 
@@ -12,7 +12,7 @@ const AddParking = () => {
       <SectionWrapper>
         <RegionDefiner selectedLngLat={selectedLngLat} />
         <MainWrapperH>
-          <SimpleMap parseCoords={(e: ClickEventValue) => setSelectedLngLat({ lng: e.lng, lat: e.lat })} />
+          <GoogleMap parseCoords={(e: ClickEventValue) => setSelectedLngLat({ lng: e.lng, lat: e.lat })} />
         </MainWrapperH>
       </SectionWrapper>
     </>

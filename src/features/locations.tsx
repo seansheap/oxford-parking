@@ -7,10 +7,12 @@ const collectionLocations = collection(db, 'locations');
 const emptyPayRestricton: PayRestriction = { activeTimes: [], pricePerHour: 0 }
 const emptyPermitRestriction: PermitRestriction = { activeTimes: [], permitCode: '' }
 const emptyVisitRestriction: VisitRestriction = { activeTimes: [], limit: 0 }
+const emptyFreeRestriction: FreeRestriction = { activeTimes: [] }
 const fillEmptyValues = (location: LocationItem) => {
   location.pay = location.pay || emptyPayRestricton
   location.permit = location.permit || emptyPermitRestriction
   location.visit = location.visit || emptyVisitRestriction
+  location.free = location.free || emptyFreeRestriction
   return location
 }
 
@@ -110,6 +112,9 @@ export interface VisitRestriction {
   activeTimes: RetrictionTimes[];
   limit: number;
 }
+export interface FreeRestriction {
+  activeTimes: RetrictionTimes[];
+}
 export interface PayRestriction {
   activeTimes: RetrictionTimes[];
   pricePerHour: number;
@@ -125,6 +130,8 @@ export interface LocationItem {
   permit?: PermitRestriction;
   pay?: PayRestriction;
   visit?: VisitRestriction;
+  free?: FreeRestriction;
+
 }
 
 const initialState: LocationState = {

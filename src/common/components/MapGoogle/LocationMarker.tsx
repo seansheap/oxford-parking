@@ -1,4 +1,4 @@
-import { MarkerCorner, MarkerWrapper } from "./MapGoogle.styled";
+import { MarkerCorner, MarkerRadius, MarkerWrapper } from "./MapGoogle.styled";
 
 interface Marker {
   onClick: Function;
@@ -11,7 +11,7 @@ const LocationPin = ({ text }: Marker) => {
   return (
     <MarkerWrapper className="pin" >
       {text}
-      <MarkerCorner className="corner" />
+      {text !== "" ? <MarkerCorner className="corner" /> : <MarkerRadius className="corner" />}
     </MarkerWrapper>
   )
 }
